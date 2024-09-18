@@ -16,7 +16,6 @@ case $opcion in
   Añadir)
     read -p "Añade un registro: " contenido
     echo "$contenido" >> lista.txt
-    sleep 0.5
     echo "Registro añadido"
   ;;
 
