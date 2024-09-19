@@ -25,43 +25,41 @@ nombrecortado=$(echo "$nombre" | cut -c 1)
 identificador=$(echo "alu"$apellido1cortado""$apellido2cortado""$nombrecortado"")
 
 #ALTA
-#Comprobar si existe grupo y si no existe se crea
+#Comprobar que el usuario existe y creación de este
+#Creacion grupo si este no existe, creacíon de grupo
 case $altaobaja in
   alta)
-    if [[ -z $grupo ]]; then
-      grupo=$identificador
-      sudo groupadd "$grupo"
-      echo "Grupo "$grupo" creado"
-    else
 
-#Comprobar que el usuario existe y creación de este
 comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
     if [[ $comprobaruser -ge 1 ]]; then
       if [[ -z $grupo ]]; then
-      sudo useradd -m -g "$grupo" "$identificador" -s /bin/bash
-      echo "Usuario "$identificador" creado"
-    else
-      echo "El usuario "$identificador" ya existe"
-      exit 1
-    fi
-;;
-
-comprobargrupo=$(getent groups "$grupo" > /dev/null 2> /dev/null ; echo $?)
-
-      if [[ $comprobargrupo -ge 1 ]]; then
+        grupo=$identificador
         sudo groupadd "$grupo"
         echo "Grupo "$grupo" creado"
       else
-        echo "El grupo "$grupo" ya existe"
+        comprobargrupo=$(getent groups "$grupo" > /dev/null 2> /dev/null ; echo $?)
+        if [[ $comprobargrupo -ge 1 ]]; then
+          sudo groupadd "$grupo"
+          echo "Grupo "$grupo" creado"
+        else
+          echo "El grupo "$grupo" ya existe"
+        fi
       fi
+      sudo useradd -m -g "$grupo" "$identificador" -s /bin/bash
+      echo "Usuario "$identificador" creado"
+        else
+          echo "El usuario "$identificador" ya existe"
+        exit 1
     fi
-
+;;
 
 #BAJA
 #Comprobacion que existe el usuario y hacer la baja
   baja)
+
 comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
-borrargrupo=$(groups $identificador | awk -F ' : ' '{print $2}')
+borrargrupo=$(groups "$identificador" | cut -d: -f2 | awk -F ' ' '{print $1}')
+
     if [[ $comprobaruser -eq 0 ]]; then
       sudo groupdel -f "$borrargrupo"
       sudo userdel -r "$identificador" 2>/dev/null
@@ -70,7 +68,6 @@ borrargrupo=$(groups $identificador | awk -F ' : ' '{print $2}')
     else
       echo "El usuario "$identificador" no existe"
     fi
-
 ;;
 
 #Otros casos
