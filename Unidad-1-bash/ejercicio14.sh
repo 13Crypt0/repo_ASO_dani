@@ -34,6 +34,18 @@ case $altaobaja in
       echo "Grupo "$grupo" creado"
     else
 
+#Comprobar que el usuario existe y creación de este
+comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
+    if [[ $comprobaruser -ge 1 ]]; then
+      if [[ -z $grupo ]]; then
+      sudo useradd -m -g "$grupo" "$identificador" -s /bin/bash
+      echo "Usuario "$identificador" creado"
+    else
+      echo "El usuario "$identificador" ya existe"
+      exit 1
+    fi
+;;
+
 comprobargrupo=$(getent groups "$grupo" > /dev/null 2> /dev/null ; echo $?)
 
       if [[ $comprobargrupo -ge 1 ]]; then
@@ -44,15 +56,6 @@ comprobargrupo=$(getent groups "$grupo" > /dev/null 2> /dev/null ; echo $?)
       fi
     fi
 
-#Comprobar que el usuario existe y creación de este
-comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
-    if [[ $comprobaruser -ge 1 ]]; then
-      sudo useradd -m -g "$grupo" "$identificador" -s /bin/bash
-      echo "Usuario "$identificador" creado"
-    else
-      echo "El usuario "$identificador" ya existe"
-    fi
-;;
 
 #BAJA
 #Comprobacion que existe el usuario y hacer la baja
