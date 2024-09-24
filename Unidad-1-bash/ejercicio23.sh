@@ -27,4 +27,3 @@ done
 
 echo ""
 echo "Número total de entradas procesadas: $contador"
-
