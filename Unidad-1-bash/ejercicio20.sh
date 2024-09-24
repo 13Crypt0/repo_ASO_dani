@@ -15,12 +15,12 @@ for ((i=1; i<=$1; i++)); do
   echo "$calculo" | grep ^0 >> texto.txt
 done
 
-resultado=cat texto.txt | bc -l
+resultado=$(cat texto.txt | wc -l)
 
 if [[ $resultado -eq 2 ]]; then
-  echo "No es un numero primo"
-else
   echo "Es un numero primo"
+else
+  echo "No es un numero primo"
 fi
 
 rm texto.txt
