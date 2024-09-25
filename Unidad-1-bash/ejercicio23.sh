@@ -19,10 +19,16 @@ for contenido in "$directorio"/*; do
     echo "$contenido --> directorio"
   elif [[ -f "$contenido" ]]; then
     echo "$contenido --> fichero"
+  elif [[ -b "$contenido" ]]; then
+    echo "$contenido --> archivo especial de bloque"
+  elif [[ -c "$contenido" ]]; then
+    echo "$contenido --> archivo especial de caracter"
+  elif [[ -h "$contenido" ]]; then
+    echo "$contenido --> enlace simbolico"
   else
     echo "$contenido --> otros"
   fi
-contador=$((contador + 1))
+  ((contador++))
 done
 
 echo ""

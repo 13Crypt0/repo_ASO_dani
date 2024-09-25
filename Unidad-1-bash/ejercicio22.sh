@@ -22,7 +22,7 @@ for contenido in "$directorio"/*; do
   else
     echo "$contenido --> otros"
   fi
-contador=$((contador + 1))
+  ((contador++))
 done
 
 echo ""
