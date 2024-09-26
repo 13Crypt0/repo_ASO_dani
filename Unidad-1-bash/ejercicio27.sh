@@ -16,4 +16,4 @@ function existe() {
   fi
 }
 
-revisar "$fichero"
+existe "$fichero"
