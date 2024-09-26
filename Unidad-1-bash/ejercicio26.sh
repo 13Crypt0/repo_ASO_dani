@@ -6,11 +6,9 @@ echo "Generando lista archivos peligosos..."
 
 #Enlaces simbolicos eliminados
 
-contador=1
-i=0
+resultado=$(find / -exec ls -l {} \; 2> /dev/null | egrep '(^[-drwxst]{7}[rwx]{3})')
 
-while [[ $i -eq $contador ]]; do
-peligrosos=`ls -lR / 2>/dev/null| egrep '(^[-pcbdrwxst]{7}[rwx]{3})' | awk '{print "/"$NF}'`
-  find / -name $peligrosos 2>/dev/null > archivos_peligrosos.txt
-   ((contador++))
-  done
+for i in $resultado; do
+  echo "$i" | egrep "^.*/.*$"
+  ((contador++))
+done
