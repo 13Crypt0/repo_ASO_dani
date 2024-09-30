@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#Realiza un script utilizando funciones que permita crear un informe de las IP libres en la red en la que se encuentra el equipo
 clear
 
 function informe () {
@@ -21,6 +21,8 @@ echo "" >> Informe.txt
 echo "Listado IP:" >> Informe.txt
 echo "" >> Informe.txt
 
+#Conversion de la nuestra ip a xxx.xxx.xxx. para agregar variable i para incrementar la ip
+
 remake=$(echo "$ip" | awk -F '.' '{print $1 "." $2 "." $3 "." }')
 for (( i=1; i<=254; i++)); do
   consultaip=$(ping -c 1 -w 1 "$remake$i" > /dev/null ; echo "$?")
@@ -30,6 +32,7 @@ for (( i=1; i<=254; i++)); do
       echo "La IP "$remake$i" NO ESTA LIBRE" >> Informe.txt
     fi
 done
+
 cat Informe.txt | more
 echo ""
 echo "Informe almacenado"
