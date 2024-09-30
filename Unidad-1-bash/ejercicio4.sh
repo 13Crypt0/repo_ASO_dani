@@ -1,4 +1,5 @@
 #!/bin/bash
+#Diseña un script en Shell que pida al usuario dos números, los guarde en dos variables y los muestre por pantalla
 
 clear
 

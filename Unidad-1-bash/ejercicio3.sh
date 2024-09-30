@@ -1,4 +1,5 @@
 #!/bin/bash
+#Modifica el script anterior para que además muestre por pantalla el número de líneas del archivo y el número de palabras.
 
 clear
 
