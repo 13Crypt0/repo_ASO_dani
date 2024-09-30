@@ -1,53 +1,38 @@
-ç#!/bin/bash
+#!/bin/bash
 
 clear
-#Falta nombre de la red
-function informacion() {
+
+function informe () {
 
   interfazred=$(ip route | grep "default via" | awk -F ' ' '{print $5}')
   ip=$(ip -o -f inet addr show "$interfazred" | awk '{print $4}' | awk -F '/' '{print $1}')
   CIDR=$(ip r | grep -E "$interfazred".*."src" | cut -d" " -f 1)
   broadcast=$(ip -o -f inet addr show "$interfazred" | awk '{print $6}')
-  mascara=$("$CIDR" | cut -d/ -f2)
+  mascara=$(echo "$CIDR" | cut -d/ -f2)
 
-echo "IP del equipo: $ip"
-echo "CIDR: $CIDR"
-echo "Broadcast: $broadcast"
-echo "Máscara de subred: $mascara"
-}
-
-informacion
-
-function ping() {
+echo "INFORME" >> Informe.txt
+echo "" >> Informe.txt
+echo "GENERANDO INFORME..."
+echo "IP del equipo: $ip" >> Informe.txt
+echo "CIDR: $CIDR" >> Informe.txt
+echo "Broadcast: $broadcast" >> Informe.txt
+echo "Máscara de subred: $mascara" >> Informe.txt
+echo "" >> Informe.txt
+echo "Listado IP:" >> Informe.txt
+echo "" >> Informe.txt
 
 remake=$(echo "$ip" | awk -F '.' '{print $1 "." $2 "." $3 "." }')
-
 for (( i=1; i<=254; i++)); do
   consultaip=$(ping -c 1 -w 1 "$remake$i" > /dev/null ; echo "$?")
     if [[ "$consultaip" -ge 1 ]]; then
-      echo "La IP "$remake$i" ESTA LIBRE"
+      echo "La IP "$remake$i" ESTA LIBRE" >> Informe.txt
     else
-      echo "La IP "$remake$i" NO ESTA LIBRE"
+      echo "La IP "$remake$i" NO ESTA LIBRE" >> Informe.txt
     fi
 done
-
+cat Informe.txt | more
+echo ""
+echo "Informe almacenado"
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-function informe () {
-  echo "GENERANDO INFORME..."
-  echo ""
-  informacion >> Informe.txt
-  ping >> Informe.txt
-}
+informe
