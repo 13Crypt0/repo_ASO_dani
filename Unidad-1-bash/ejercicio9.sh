@@ -1,6 +1,10 @@
 #!/bin/bash
+#Realiza un script que contenga un menú, de forma que muestre las cuatro operaciones matemáticas básicas: sumar, restar, multiplicar y dividir. Solicita dos números al usuario y muestra el resultado en función de la opción seleccionada.
 
 clear
+
+#Menu a mostrar:
+
 echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
 echo "*     Introduce 1 si desea sumar          *"
 echo "*     Introduce 2 si desea restar         *"
@@ -11,7 +15,11 @@ echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
 echo ""
 read -p "Introduce una opcion: " opcion
 
+#Operaciones:
+
 case $opcion in
+
+#Suma
 
   1)
     read -p "Introduce un 1º numero: " numero1
@@ -20,6 +28,9 @@ case $opcion in
       echo "El resultado es $suma"
       exit 0
     ;;
+
+#Resta
+
   2)
     read -p "Introduce un 1º numero: " numero1
     read -p "Introduce un 2º numero: " numero2
@@ -27,6 +38,9 @@ case $opcion in
       echo "El resultado es $resta"
       exit 0
     ;;
+
+#Multiplicacion
+
   3)
     read -p "Introduce un 1º numero: " numero1
     read -p "Introduce un 2º numero: " numero2
@@ -34,6 +48,9 @@ case $opcion in
       echo "El resultado es $multiplicar"
       exit 0
     ;;
+
+#Division
+
   4)
     read -p "Introduce un 1º numero: " numero1
     read -p "Introduce un 2º numero: " numero2
@@ -41,6 +58,9 @@ case $opcion in
       echo "El resultado es $division"
       exit 0
     ;;
+
+#Otras opciones
+
   *)
     echo "Opcion no valida."
     echo "Introduce una opcion valida (1 - 2 - 3 - 4)"

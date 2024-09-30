@@ -1,4 +1,5 @@
 #!/bin/bash
+#Realizar un script gestionusuarios.sh que permita dar de alta y de baja a usuario del sistema GNU/Linux indicados como argumento: ./gestionusuarios.sh alta/baja nombre apellido1 apellido2 [grupo]
 
 clear
 
@@ -15,7 +16,7 @@ apellido1=$3
 apellido2=$4
 grupo=$5
 
-#Corte de nombres con almacenamiento variables
+#Corte de nombres con almacenamiento en variables
 apellido1cortado=$(echo "$apellido1" | cut -c 1-2)
 apellido2cortado=$(echo "$apellido2" | cut -c 1-2)
 nombrecortado=$(echo "$nombre" | cut -c 1)
@@ -27,10 +28,11 @@ identificador=$(echo "alu"$apellido1cortado""$apellido2cortado""$nombrecortado""
 #ALTA
 #Comprobar que el usuario existe y creación de este
 #Creacion grupo si este no existe, creacíon de grupo
+
 case $altaobaja in
   alta)
 
-comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
+  comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
     if [[ $comprobaruser -ge 1 ]]; then
       if [[ -z $grupo ]]; then
         grupo=$identificador
@@ -55,11 +57,11 @@ comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
 
 #BAJA
 #Comprobacion que existe el usuario y hacer la baja
+
   baja)
 
-comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
-borrargrupo=$(groups "$identificador" | cut -d: -f2 | awk -F ' ' '{print $1}')
-
+  comprobaruser=$(id "$identificador" > /dev/null 2> /dev/null ; echo $?)
+  borrargrupo=$(groups "$identificador" | cut -d: -f2 | awk -F ' ' '{print $1}')
     if [[ $comprobaruser -eq 0 ]]; then
       sudo groupdel -f "$borrargrupo"
       sudo userdel -r "$identificador" 2>/dev/null
@@ -71,6 +73,7 @@ borrargrupo=$(groups "$identificador" | cut -d: -f2 | awk -F ' ' '{print $1}')
 ;;
 
 #Otros casos
+
   *)
     echo "Error. La sintaxis correcta es ./gestionusuarios.sh alta/baja nombre apellido1 apellido2 [grupo]"
 ;;

@@ -1,4 +1,6 @@
 #!/bin/bash
+#Crea un shell script que al ejecutarlo muestre por pantalla uno de estos mensajes “Buenos días”, “Buenas tardes” o “Buenas noches”, en función de la hora que sea en el sistema (de 8:00 de la mañana a 15:00 será mañana, de 15:00 a 20:00 será tarde y el resto será noche). Para obtener la hora del sistema utiliza el comando date.
+
 
 clear
 

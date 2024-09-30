@@ -1,22 +1,26 @@
 #!/bin/bash
+#Construye un programa denominado AGENDA que permita mediante un menú, el mantenimiento de un pequeño archivo lista.txt con el nombre, dirección y teléfono de varias personas.
+
 
 clear
+
+#Menu:
 
 echo "Escribe "Añadir" para añadir un registro"
 echo "Escribe "Buscar" para buscar entradas por nombre, direccion o telefono"
 echo "Escribe "Listar" para visualizar todo el archivo"
 echo "Escribe "Ordenar" para ordenar los registros alfabéticamente"
 echo "Escribe "Borrar" para borrar el archivo"
-
 echo ""
 
 read -p "Introduce una opción mencionada: " opcion
+
 case $opcion in
 
   Añadir)
     read -p "Añade un registro: " contenido
-    echo "$contenido" >> lista.txt
-    echo "Registro añadido"
+      echo "$contenido" >> lista.txt
+      echo "Registro añadido"
   ;;
 
   Buscar)
