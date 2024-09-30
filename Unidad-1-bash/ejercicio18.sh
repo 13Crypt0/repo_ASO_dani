@@ -1,4 +1,5 @@
 #!/bin/bash
+#Realizar un script utilizando el bucle for que muestre el siguiente patrón
 
 clear
 

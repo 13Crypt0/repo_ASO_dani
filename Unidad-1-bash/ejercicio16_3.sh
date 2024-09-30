@@ -1,4 +1,5 @@
 #!/bin/bash
+#Crea un shell script que sume los números del 1 al 1000 mediante una estructura until
 
 clear
 

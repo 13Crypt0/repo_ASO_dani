@@ -1,4 +1,5 @@
 #!/bin/bash
+#Escribir un script que, dado el nombre de un directorio como parámetro, muestre las estadísticas de cuantos ficheros y cuantos subdirectorios contiene. Debes comprobar que existe el directorio que se pasa como parámetro y que efectivamente es un directorio.
 
 clear
 
