@@ -1,0 +1,87 @@
+  - name: Creación Apache
+    hosts: apache
+    become: true
+    tasks:
+      - name: Instalación paquetes apache
+        apt: pkg=apache2 state=present update_cache=true
+
+      - name: Instalación dependencias apache php
+        apt: pkg=libapache2-mod-php state=present update_cache=true
+
+      - name: Instalacion SSL
+        apt: pkg=openssl state=present update_cache=true
+
+      - name: Directorio SSL
+        file: path=/etc/apache2/.ssl/ state=directory mode=0755
+
+      - name: Transferir danimipag.crt
+        copy: src=ssl/danimipag.crt dest=/etc/apache2/.ssl/danimipag.crt mode=0644
+
+      - name: Transferir danimipag.key
+        copy: src=ssl/danimipag.key dest=/etc/apache2/.ssl/danimipag.key mode=0644
+
+      - name: Subimos configuración virtualhost
+        copy: src=conf/mipagina dest=/etc/apache2/sites-available/mipagina.conf
+
+      - name: Directorio sitio web
+        file: path=/var/www/pag/ state=directory mode=0755
+
+      - name: Subimos sitio web
+        copy: src=content/index.php dest=/var/www/pag
+
+      - name: Habilitamos modulo SSL
+        apache2_module: name=ssl state=present
+
+      - name: Habilitamos modulo PHP
+        apache2_module: name=php state=present
+
+      - name: Permisos
+        command: chmod -R 755 /var/www/pag
+
+      - name: Permisos user/group
+        command: chown -R www-data:www-data /var/www/pag
+
+      - name: Habilitamos sitio
+        command: a2ensite mipagina.conf
+        notify:
+          - restart apache
+
+      - name: Desactivamos configuracion por defecto
+        file: dest=/etc/apache2/sites-enabled/000-default.conf state=absent
+        notify:
+          - restart apache
+
+      - name: Habilitamos el servicio Apache
+        service: name=apache2 enabled=yes state=started
+
+    handlers:
+      - name: restart apache
+        service: name=apache2 state=restarted
+
+
+# CREACIÓN PROXY INVERSO CON HAPROXY
+  - name: Creación Proxy Inverso
+    hosts: proxy
+    become: true
+    tasks:
+      - name: Instalacion HAProxy
+        apt: pkg=haproxy state=present update_cache=true
+
+      - name: Configuracion /etc/hosts
+        copy: src=dnsconf/hosts dest=/etc/hosts
+
+      - name: Instalacion rsyslog para logs de haproxy
+        apt: pkg=rsyslog state=present update_cache=true
+
+      - name: Directorio SSL
+        file: path=/etc/haproxy/.ssl/ state=directory mode=0755
+
+      - name: Transferir proxy.pem
+        copy: src=ssl/proxy.pem dest=/etc/haproxy/.ssl/proxy.pem mode=0644
+
+      - name: Copias conf HAProxy
+        copy: src=haproxy/haproxy.cfg dest=/etc/haproxy/haproxy.cfg mode=0600
+
+      - name: Habilitar y reiniciar
+        service: name=haproxy state=restarted enabled=true
+

@@ -1,0 +1,23 @@
+<VirtualHost *:443>
+    # Definición del servidor
+    ServerAdmin root@example.com
+    ServerName danimipag.com
+    DocumentRoot /var/www/pag
+
+    # Configuración de Logs
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    # Configuración SSL
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/.ssl/danimipag.crt
+    SSLCertificateKeyFile /etc/apache2/.ssl/danimipag.key
+
+    # Configuración de directorios
+    <Directory /var/www/pag>
+        Options -Indexes +FollowSymLinks
+        AllowOverride None
+        Require all granted
+	AddType application/x-httpd-php .php
+    </Directory>
+</VirtualHost>

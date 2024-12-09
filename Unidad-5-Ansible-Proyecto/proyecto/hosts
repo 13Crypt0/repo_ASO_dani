@@ -1,0 +1,6 @@
+[apache]
+host1.exdom2.org
+host2.exdom2.org
+
+[proxy]
+host3.exdom2.org

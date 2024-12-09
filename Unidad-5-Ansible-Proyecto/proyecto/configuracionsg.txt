@@ -1,0 +1,57 @@
+#Paso opcional
+#Implementar junto a exec.yml o incluir en este
+
+ MODIFICACIÓN GRUPOS DE SEGURIDAD
+  - name: Modificar grupos de seguridad en AWS
+    hosts: apache, proxy
+    gather_facts: yes
+    tasks:
+      - name: Instalar pip3
+        apt: name=python3-pip state=present become=yes
+
+      - name: Instalar venv
+        apt: name=python3-venv state=present become=yes
+
+      - name: Crear entorno virtual
+        command: python3 -m venv /opt/venv become=yes
+      - name: Crear archivo de requisitos para botocore y boto3
+        copy:
+          dest: /opt/venv/requirements.txt
+          content: |
+            botocore
+            boto3
+        become: yes
+
+      - name: Instalar botocore y boto3 en el entorno virtual
+        pip: requirements=/opt/venv/requirements.txt virtualenv=/opt/venv become=yes
+
+      - name: Modificar grupos de seguridad en AWS
+        amazon.aws.ec2_security_group:
+          name: "sg-0e8c1baf554043300"
+          region: "us-east-1"
+          description: "Entrada para HTTPS e ICMP"
+          vpc_id: "vpc-02d91fb3e3dbb5c5b"
+          rules:
+            - proto: tcp
+              from_port: 443
+              to_port: 443
+              cidr_ip: 0.0.0.0/0
+            - proto: icmp
+              from_port: 8
+              to_port: -1
+              cidr_ip: 0.0.0.0/0
+          state: present
+        environment:
+          PATH: "/opt/venv/bin:{{ ansible_env.PATH }}"
+          AWS_ACCESS_KEY_ID: "key acceso id"
+          AWS_SECRET_ACCESS_KEY: "clave secreta"
+          AWS_DEFAULT_REGION: "us-east-1"
+
+#Ejemplo inventario con este play:
+
+[apache]
+host1.exdom2.org ansible_host=172.31.21.82 ansible_python_interpreter=/opt/venv/bin/python
+host2.exdom2.org ansible_host=172.31.23.100 ansible_python_interpreter=/opt/venv/bin/python
+
+[proxy]
+host3.exdom2.org ansible_host=172.31.19.197 ansible_python_interpreter=/opt/venv/bin/python
