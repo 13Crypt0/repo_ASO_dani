@@ -13,20 +13,19 @@ New-SmbShare -Path C:\Empresa -Name Empresa
 
 Write-Host "Agregando permisos a Empresa..."
 Revoke-SmbShareAccess -Name Empresa -AccountName Todos -Force
-foreach ($dept in $departamentos) {
-    Grant-SmbShareAccess -Name Empresa -AccountName G-$($dept.departamento) -AccessRight Change -Force
-    Grant-SmbShareAccess -Name Empresa -AccountName Administradores -AccessRight Full -Force
-    $ruta = "C:\Empresa"
-    $acl = Get-Acl -Path $ruta
-    $acl.SetAccessRuleProtection($true, $false)
-    $permisoadmin = @('Administradores', 'FullControl', 'None', 'None', 'Allow')
-    $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisoadmin
-    $acl.SetAccessRule($ace)
-    $permisogrupo = @("G-$($dept.departamento)", 'ReadAndExecute', 'None', 'None', 'Allow')
-    $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisogrupo
-    $acl.SetAccessRule($ace)
-    $acl | Set-Acl -Path $ruta
-}
+Grant-SmbShareAccess -Name Empresa -AccountName 'Usuarios del dominio' -AccessRight Change -Force
+Grant-SmbShareAccess -Name Empresa -AccountName Administradores -AccessRight Full -Force
+$ruta = "C:\Empresa"
+$acl = Get-Acl -Path $ruta
+$acl.SetAccessRuleProtection($true, $false)
+$permisoadmin = @('Administradores', 'FullControl', 'None', 'None', 'Allow')
+$ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisoadmin
+$acl.SetAccessRule($ace)
+$permisousers = @('Usuarios del dominio', 'ReadAndExecute', 'None', 'None', 'Allow')
+$ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisousers
+$acl.SetAccessRule($ace)
+$acl | Set-Acl -Path $ruta
+
 
 Write-Host "Asignando permisos a subdirectorios..."
 foreach ($dept in $departamentos) {
@@ -38,6 +37,9 @@ foreach ($dept in $departamentos) {
     $acl.SetAccessRule($ace)
     $permisogrupo = @("G-$($dept.departamento)", 'Modify', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
     $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisogrupo
+    $acl.SetAccessRule($ace)
+    $permisoadmin = @('Usuarios del dominio', 'ReadAndExecute', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
+    $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisoadmin
     $acl.SetAccessRule($ace)
     $acl | Set-Acl -Path $ruta
 }
