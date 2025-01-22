@@ -38,8 +38,8 @@ foreach ($dept in $departamentos) {
     $permisogrupo = @("G-$($dept.departamento)", 'Modify', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
     $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisogrupo
     $acl.SetAccessRule($ace)
-    $permisoadmin = @('Usuarios del dominio', 'ReadAndExecute', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
-    $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisoadmin
+    $permisousers = @('Usuarios del dominio', 'ReadAndExecute', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
+    $ace = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisousers
     $acl.SetAccessRule($ace)
     $acl | Set-Acl -Path $ruta
 }
