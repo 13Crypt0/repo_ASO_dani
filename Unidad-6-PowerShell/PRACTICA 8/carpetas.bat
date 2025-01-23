@@ -1,0 +1,1 @@
+﻿powershell New-SmbMapping -LocalPath 'Y:' -RemotePath '\\SRV-ASO\Empresa'
