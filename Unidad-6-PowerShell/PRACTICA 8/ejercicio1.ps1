@@ -35,5 +35,3 @@ foreach ($emp in $empleados) {
     Set-ADUser -Identity "$($emp.nombre).$($emp.apellido)" -ScriptPath "carpetas.bat" -HomeDrive "Z:" -HomeDirectory "\\SRV-ASO\Empresa_users$\$($emp.nombre).$($emp.apellido)"
 }
 Copy-Item 'C:\Users\Administrador\Desktop\repo_ASO_dani\Unidad-6-PowerShell\PRACTICA 8\carpetas.bat' 'C:\Windows\SYSVOL\sysvol\aso.local\scripts'
-
-
